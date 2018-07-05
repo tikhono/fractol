@@ -6,88 +6,128 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/04 11:33:34 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/05 17:05:18 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
-#include <math.h>
-#include <stdio.h>
+#include "main.h"
 
-int		main(void)
+int		exit_mouse(void)
 {
-	void	*win;
-	void	*mlx;
-	int		height;
-	int		width;
+	exit(0);
+	return (0);
+}
+
+void	complex_pow(double power, double *x, double *y)
+{
+	double	z = sqrt(*x * *x + *y * *y);
+	double	phi_x = acos(*x / z);
+	double	phi_y = asin(*y / z);
+	double	res_z = pow(z, power);
+	*x = res_z * cos(power * phi_x);
+	*y = res_z * sin(power * phi_y);
+}
+
+void	calc(t_mlx *p)
+{
 	int		i;
 	int		j;
 	int		n;
-	int		lim;
 	double	x;
-	double	off_x;
 	double	y;
-	double	off_y;
-	double	scale;
-	double	xmin;
-	double	ymin;
-	double	xmax;
-	double	ymax;
-	double	dx;
-	double	dy;
 	double	a;
-	double	aa;
 	double	b;
-	double	bb;
-	double	twoab;
 
-	height = 750;
-	width = 1200;
-	mlx = mlx_init();
-	win = mlx_new_window(mlx, width, height, "start");
-	off_x = 0.0;
-	off_y = 0.0;
-	scale = 1.0;
-	scale = 2.0 / scale;
-	xmin = -scale;
-	xmax = scale;
-	ymin = -scale * height / width;
-	ymax = scale * height / width;
-	dx = (xmax - xmin) / width;
-	dy = (ymax - ymin) / height;
-	lim = 1000;
-	y = ymin + off_y;
+	p->xmin = -p->scale;
+	p->xmax = p->scale;
+	p->ymin = -p->scale * p->height / p->width;
+	p->ymax = p->scale * p->height / p->width;
+	p->dx = (p->xmax - p->xmin) / p->width;
+	p->dy = (p->ymax - p->ymin) / p->height;
+
+	y = p->ymin + p->off_y;
 	j = 0;
-	while (j < height)
+	while (j < p->height)
 	{
-		x = xmin + off_x;
+		x = p->xmin + p->off_x;
 		i = 0;
-		while (i < width)
+		while (i < p->width)
 		{
 			a = x;
 			b = y;
 			n = 0;
-			while (n < lim)
+			while (n < p->lim)
 			{
-				aa = a * a;
-				bb = b * b;
-				twoab = 2.0 * a * b;
-				a = aa - bb + x;
-				b = twoab + y;	
+				complex_pow(p->power, &a, &b);
+				a += x;
+				b += y;	
 				if (a * a + b * b > 4.0)
 					break;
 				++n;
 			}
-			if (n == lim)
-				mlx_pixel_put(mlx, win, i, j, 0);
+			if (n == p->lim)
+				mlx_pixel_put(p->mlx, p->win, i, j, 0);
 			else
-				mlx_pixel_put(mlx, win, i, j, 0x0F0F0F * (double) (n + 1));
-			x += dx;
+				mlx_pixel_put(p->mlx, p->win, i, j, 0x0F0F0F * (double) (n + 1));
+			x += p->dx;
 			++i;
 		}
-		y += dy;
+		y += p->dy;
 		++j;
 	}
-	mlx_loop(mlx);
+}
+
+int		call_hookers(int key, t_mlx *p)
+{
+	if (key == 123)
+		p->off_x -= 0.1; 
+	if (key == 124)
+		p->off_x += 0.1;
+	if (key == 125)
+		p->off_x += 0.1;
+	if (key == 126)
+		p->off_x -= 0.1;
+	if (key == 0)
+		p->scale += 0.1;
+	if (key == 1)
+		p->scale -= 0.1;
+	if (key == 12)
+		p->power += 0.1;
+	if (key == 13)
+		p->power -= 0.1;
+	if (key == 53)
+		exit (0);
+	calc(p);
+	return (0);
+}
+
+void	initialise(t_mlx *p)
+{
+	p->height = 750;
+	p->width = 1200;
+	p->mlx = mlx_init();
+	p->win = mlx_new_window(p->mlx, p->width, p->height, "start");
+	p->lim = 500;
+	p->power = 2.0;
+	p->off_x = 0.0;
+	p->off_y = 0.0;
+	p->scale = 1.0;
+	p->scale = 2.0 / p->scale;
+	p->xmin = -p->scale;
+	p->xmax = p->scale;
+	p->ymin = -p->scale * p->height / p->width;
+	p->ymax = p->scale * p->height / p->width;
+	p->dx = (p->xmax - p->xmin) / p->width;
+	p->dy = (p->ymax - p->ymin) / p->height;
+	calc(p);
+}
+
+int		main(void)
+{
+	t_mlx	p;
+	initialise(&p);
+	mlx_hook(p.win, 2, 5, call_hookers, &p);
+	mlx_hook(p.win, 17, 1L << 17, exit_mouse, &p);
+	mlx_loop(p.mlx);
 	return (0);
 }
