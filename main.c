@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/06 14:43:55 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/06 17:15:20 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,9 @@ int		exit_mouse(void)
 void    complex_pow(double power, double *x, double *y)
 {
 	double	z;
-	double	phi_x;
-	double	phi_y;
 	double	res_z;
-	double	kek;
-	double	lol;
+	double	phi;
+	double	pi;
 
 	if (*x != 0.0 || *y != 0.0)
 	{
@@ -35,16 +33,15 @@ void    complex_pow(double power, double *x, double *y)
 			z = fabs(*x);
 		else
 			z = sqrt(*x * *x + *y * *y);
-		res_z = pow(z, power);
-		kek = (*y >= 0 ? 1.0 : -1.0);
-		lol = 1.0;
+		pi = *y < 0.0 ? - M_PI : M_PI;
 		if (*x > 0.0)
-			lol = 0.0;
-		if (*x < 0.0)
-			lol = 2.0;
-		phi_x = M_PI / 2.0 * lol * kek + atan(*y / *x);
-		*x = res_z * cos(power * phi_x);
-		*y = res_z * sin(power * phi_x);
+			pi = 0.0;
+		if (*x == 0.0)
+			pi /= 2.0;
+		phi = atan(*y / *x) * (*x == 0.0 ? 0.0 : 1.0) + pi;
+		res_z = pow(z, power);
+		*x = res_z * cos(power * phi);
+		*y = res_z * sin(power * phi);
 	}
 }
 
