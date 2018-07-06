@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/05 17:05:18 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/06 14:43:55 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,34 @@ int		exit_mouse(void)
 	return (0);
 }
 
-void	complex_pow(double power, double *x, double *y)
+void    complex_pow(double power, double *x, double *y)
 {
-	double	z = sqrt(*x * *x + *y * *y);
-	double	phi_x = acos(*x / z);
-	double	phi_y = asin(*y / z);
-	double	res_z = pow(z, power);
-	*x = res_z * cos(power * phi_x);
-	*y = res_z * sin(power * phi_y);
+	double	z;
+	double	phi_x;
+	double	phi_y;
+	double	res_z;
+	double	kek;
+	double	lol;
+
+	if (*x != 0.0 || *y != 0.0)
+	{
+		if (*x == 0.0)
+			z = fabs(*y);
+		else if (*y == 0.0)
+			z = fabs(*x);
+		else
+			z = sqrt(*x * *x + *y * *y);
+		res_z = pow(z, power);
+		kek = (*y >= 0 ? 1.0 : -1.0);
+		lol = 1.0;
+		if (*x > 0.0)
+			lol = 0.0;
+		if (*x < 0.0)
+			lol = 2.0;
+		phi_x = M_PI / 2.0 * lol * kek + atan(*y / *x);
+		*x = res_z * cos(power * phi_x);
+		*y = res_z * sin(power * phi_x);
+	}
 }
 
 void	calc(t_mlx *p)
@@ -84,17 +104,17 @@ int		call_hookers(int key, t_mlx *p)
 	if (key == 124)
 		p->off_x += 0.1;
 	if (key == 125)
-		p->off_x += 0.1;
+		p->off_y += 0.1;
 	if (key == 126)
-		p->off_x -= 0.1;
+		p->off_y -= 0.1;
 	if (key == 0)
 		p->scale += 0.1;
 	if (key == 1)
 		p->scale -= 0.1;
 	if (key == 12)
-		p->power += 0.1;
+		p->power += 0.001;
 	if (key == 13)
-		p->power -= 0.1;
+		p->power -= 0.001;
 	if (key == 53)
 		exit (0);
 	calc(p);
@@ -107,7 +127,7 @@ void	initialise(t_mlx *p)
 	p->width = 1200;
 	p->mlx = mlx_init();
 	p->win = mlx_new_window(p->mlx, p->width, p->height, "start");
-	p->lim = 500;
+	p->lim = 50;
 	p->power = 2.0;
 	p->off_x = 0.0;
 	p->off_y = 0.0;
