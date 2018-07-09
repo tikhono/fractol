@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/06 17:15:20 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/09 10:47:39 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void    complex_pow(double power, double *x, double *y)
 			pi = 0.0;
 		if (*x == 0.0)
 			pi /= 2.0;
-		phi = atan(*y / *x) * (*x == 0.0 ? 0.0 : 1.0) + pi;
+		phi = (atan(*y / *x) * (*x == 0.0 ? 0.0 : 1.0) + pi) * power;
 		res_z = pow(z, power);
-		*x = res_z * cos(power * phi);
-		*y = res_z * sin(power * phi);
+		*x = res_z * cos(phi);
+		*y = res_z * sin(phi);
 	}
 }
 
@@ -75,6 +75,10 @@ void	calc(t_mlx *p)
 			n = 0;
 			while (n < p->lim)
 			{
+				a = p->abs_x == 'y' ? fabs(a) : a;
+				b = p->abs_y == 'y' ? fabs(b) : b;
+				a = p->sign_x == '+' ? a : -a;
+				b = p->sign_y == '+' ? b : -b;
 				complex_pow(p->power, &a, &b);
 				a += x;
 				b += y;	
@@ -112,6 +116,14 @@ int		call_hookers(int key, t_mlx *p)
 		p->power += 0.001;
 	if (key == 13)
 		p->power -= 0.001;
+	if (key == 18)
+		p->sign_x = p->sign_x == '+' ? '-' : '+';
+	if (key == 19)
+		p->abs_x = p->abs_x == 'y' ? 'n' : 'y';
+	if (key == 20)
+		p->sign_y = p->sign_y == '+' ? '-' : '+';
+	if (key == 21)
+		p->abs_y = p->abs_y == 'y' ? 'n' : 'y';
 	if (key == 53)
 		exit (0);
 	calc(p);
@@ -125,6 +137,10 @@ void	initialise(t_mlx *p)
 	p->mlx = mlx_init();
 	p->win = mlx_new_window(p->mlx, p->width, p->height, "start");
 	p->lim = 50;
+	p->abs_x = 'n';
+	p->abs_y = 'n';
+	p->sign_x = '+';
+	p->sign_y = '+';
 	p->power = 2.0;
 	p->off_x = 0.0;
 	p->off_y = 0.0;

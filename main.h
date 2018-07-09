@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/05 16:44:29 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/09 10:13:14 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ typedef struct	s_mlx
 	double		scale;
 	int			height;
 	int			width;
+	char		abs_x;
+	char		abs_y;
+	char		sign_x;
+	char		sign_y;
 }				t_mlx;
 
 #endif
