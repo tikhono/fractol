@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/09 11:47:55 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/09 14:43:40 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ void	calc(t_mlx *p)
 	p->dx = (p->xmax - p->xmin) / p->width;
 	p->dy = (p->ymax - p->ymin) / p->height;
 
-	x = -1.0;
-	y = 0.0;
 	y = p->ymin + p->off_y;
 	j = 0;
 	while (j < p->height)
@@ -90,10 +88,8 @@ void	calc(t_mlx *p)
 			}
 			if (n == p->lim)
 				p->addr[j * p->width + i] = 0;
-			//mlx_pixel_put(p->mlx, p->win, i, j, 0);
 			else
 				p->addr[j * p->width + i] = 0x0F0F0F * (double) (n + 1);
-			//mlx_pixel_put(p->mlx, p->win, i, j, 0x0F0F0F * (double) (n + 1));
 			x += p->dx;
 			++i;
 		}
