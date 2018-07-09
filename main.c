@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/09 10:47:39 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/09 11:47:55 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	calc(t_mlx *p)
 	p->dx = (p->xmax - p->xmin) / p->width;
 	p->dy = (p->ymax - p->ymin) / p->height;
 
+	x = -1.0;
+	y = 0.0;
 	y = p->ymin + p->off_y;
 	j = 0;
 	while (j < p->height)
@@ -80,22 +82,25 @@ void	calc(t_mlx *p)
 				a = p->sign_x == '+' ? a : -a;
 				b = p->sign_y == '+' ? b : -b;
 				complex_pow(p->power, &a, &b);
-				a += x;
+				a += x;//or julia point
 				b += y;	
 				if (a * a + b * b > 4.0)
 					break;
 				++n;
 			}
 			if (n == p->lim)
-				mlx_pixel_put(p->mlx, p->win, i, j, 0);
+				p->addr[j * p->width + i] = 0;
+			//mlx_pixel_put(p->mlx, p->win, i, j, 0);
 			else
-				mlx_pixel_put(p->mlx, p->win, i, j, 0x0F0F0F * (double) (n + 1));
+				p->addr[j * p->width + i] = 0x0F0F0F * (double) (n + 1);
+			//mlx_pixel_put(p->mlx, p->win, i, j, 0x0F0F0F * (double) (n + 1));
 			x += p->dx;
 			++i;
 		}
 		y += p->dy;
 		++j;
 	}
+	mlx_put_image_to_window(p->mlx, p->win, p->img, 0, 0);
 }
 
 int		call_hookers(int key, t_mlx *p)
@@ -136,6 +141,8 @@ void	initialise(t_mlx *p)
 	p->width = 1200;
 	p->mlx = mlx_init();
 	p->win = mlx_new_window(p->mlx, p->width, p->height, "start");
+	p->img = mlx_new_image(p->mlx, p->width, p->height);
+	p->addr = (int *) mlx_get_data_addr(p->img, &p->a, &p->b, &p->c);
 	p->lim = 50;
 	p->abs_x = 'n';
 	p->abs_y = 'n';
