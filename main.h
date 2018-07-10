@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/09 11:45:25 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/10 12:01:03 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 # include <stdlib.h>
 # include <time.h>
 # include <unistd.h>
+# include <assert.h>
+# include <CoreServices/CoreServices.h>
+# include <mach/mach.h>
+# include <mach/mach_time.h>
+# include <unistd.h>
 
 typedef struct	s_mlx
 {
@@ -29,12 +34,10 @@ typedef struct	s_mlx
 	double		xmax;
 	double		ymin;
 	double		ymax;
-	double		lim;
 	double		power;
 	double		off_x;
 	double		off_y;
-	double		dx;
-	double		dy;
+	double		d;
 	double		scale;
 	int			height;
 	int			width;
@@ -46,6 +49,7 @@ typedef struct	s_mlx
 	char		abs_y;
 	char		sign_x;
 	char		sign_y;
+	uint64_t	lim;
 }				t_mlx;
 
 #endif

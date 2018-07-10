@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/09 14:43:40 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/10 12:12:36 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,20 @@ void    complex_pow(double power, double *x, double *y)
 
 void	calc(t_mlx *p)
 {
-	int		i;
-	int		j;
-	int		n;
-	double	x;
-	double	y;
-	double	a;
-	double	b;
+	int			i;
+	int			j;
+	double		x;
+	double		y;
+	double		a;
+	double		b;
+	uint64_t	t1;
+	uint64_t	t2;
 
 	p->xmin = -p->scale;
 	p->xmax = p->scale;
 	p->ymin = -p->scale * p->height / p->width;
 	p->ymax = p->scale * p->height / p->width;
-	p->dx = (p->xmax - p->xmin) / p->width;
-	p->dy = (p->ymax - p->ymin) / p->height;
-
+	p->d = 2.0 * p->scale / p->width;
 	y = p->ymin + p->off_y;
 	j = 0;
 	while (j < p->height)
@@ -72,8 +71,8 @@ void	calc(t_mlx *p)
 		{
 			a = x;
 			b = y;
-			n = 0;
-			while (n < p->lim)
+			t1 = mach_absolute_time();
+			while ((t2 = (mach_absolute_time()) - t1) < p->lim)
 			{
 				a = p->abs_x == 'y' ? fabs(a) : a;
 				b = p->abs_y == 'y' ? fabs(b) : b;
@@ -84,16 +83,15 @@ void	calc(t_mlx *p)
 				b += y;	
 				if (a * a + b * b > 4.0)
 					break;
-				++n;
 			}
-			if (n == p->lim)
+			if (t2 >= p->lim)
 				p->addr[j * p->width + i] = 0;
 			else
-				p->addr[j * p->width + i] = 0x0F0F0F * (double) (n + 1);
-			x += p->dx;
+				p->addr[j * p->width + i] = 0xFFFFFF;
+			x += p->d;
 			++i;
 		}
-		y += p->dy;
+		y += p->d;
 		++j;
 	}
 	mlx_put_image_to_window(p->mlx, p->win, p->img, 0, 0);
@@ -102,17 +100,17 @@ void	calc(t_mlx *p)
 int		call_hookers(int key, t_mlx *p)
 {
 	if (key == 123)
-		p->off_x -= 0.1; 
+		p->off_x -= 0.1 * p->scale; 
 	if (key == 124)
-		p->off_x += 0.1;
+		p->off_x += 0.1 * p->scale;
 	if (key == 125)
-		p->off_y += 0.1;
+		p->off_y += 0.1 * p->scale;
 	if (key == 126)
-		p->off_y -= 0.1;
+		p->off_y -= 0.1 * p->scale;
 	if (key == 0)
-		p->scale += 0.1;
+		p->scale += 0.1 * p->scale;
 	if (key == 1)
-		p->scale -= 0.1;
+		p->scale -= 0.1 * p->scale;
 	if (key == 12)
 		p->power += 0.001;
 	if (key == 13)
@@ -133,13 +131,15 @@ int		call_hookers(int key, t_mlx *p)
 
 void	initialise(t_mlx *p)
 {
-	p->height = 750;
-	p->width = 1200;
+//	p->height = 1080;
+//	p->width = 1920;
+	p->height = 500;
+	p->width = 500;
 	p->mlx = mlx_init();
 	p->win = mlx_new_window(p->mlx, p->width, p->height, "start");
 	p->img = mlx_new_image(p->mlx, p->width, p->height);
 	p->addr = (int *) mlx_get_data_addr(p->img, &p->a, &p->b, &p->c);
-	p->lim = 50;
+	p->lim = 20000;
 	p->abs_x = 'n';
 	p->abs_y = 'n';
 	p->sign_x = '+';
@@ -153,8 +153,7 @@ void	initialise(t_mlx *p)
 	p->xmax = p->scale;
 	p->ymin = -p->scale * p->height / p->width;
 	p->ymax = p->scale * p->height / p->width;
-	p->dx = (p->xmax - p->xmin) / p->width;
-	p->dy = (p->ymax - p->ymin) / p->height;
+	p->d = 2.0 * p->scale / p->width;
 	calc(p);
 }
 
