@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/10 12:12:36 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/11 12:23:10 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ void	calc(t_mlx *p)
 			if (t2 >= p->lim)
 				p->addr[j * p->width + i] = 0;
 			else
-				p->addr[j * p->width + i] = 0xFFFFFF;
+				p->addr[j * p->width + i] = 0xFFFFFF / (p->lim / 1000) * (t2 / 1000);
+			//	p->addr[j * p->width + i] = 0xFFFFFF;
 			x += p->d;
 			++i;
 		}
@@ -112,9 +113,9 @@ int		call_hookers(int key, t_mlx *p)
 	if (key == 1)
 		p->scale -= 0.1 * p->scale;
 	if (key == 12)
-		p->power += 0.001;
+		p->power += 0.1;
 	if (key == 13)
-		p->power -= 0.001;
+		p->power -= 0.1;
 	if (key == 18)
 		p->sign_x = p->sign_x == '+' ? '-' : '+';
 	if (key == 19)
@@ -133,13 +134,13 @@ void	initialise(t_mlx *p)
 {
 //	p->height = 1080;
 //	p->width = 1920;
-	p->height = 500;
-	p->width = 500;
+	p->height = 600;
+	p->width = 600;
 	p->mlx = mlx_init();
 	p->win = mlx_new_window(p->mlx, p->width, p->height, "start");
 	p->img = mlx_new_image(p->mlx, p->width, p->height);
 	p->addr = (int *) mlx_get_data_addr(p->img, &p->a, &p->b, &p->c);
-	p->lim = 20000;
+	p->lim = 10000;
 	p->abs_x = 'n';
 	p->abs_y = 'n';
 	p->sign_x = '+';
@@ -160,6 +161,7 @@ void	initialise(t_mlx *p)
 int		main(void)
 {
 	t_mlx	p;
+
 	initialise(&p);
 	mlx_hook(p.win, 2, 5, call_hookers, &p);
 	mlx_hook(p.win, 17, 1L << 17, exit_mouse, &p);
