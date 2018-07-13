@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/10 12:26:12 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/13 13:20:20 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,48 @@
 # include <mach/mach.h>
 # include <mach/mach_time.h>
 # include <unistd.h>
+# include <OpenCL/cl.h>
+
+typedef struct	s_kernel
+{
+	cl_kernel			kernel;
+	cl_command_queue	queue;
+	cl_mem				input_buffer;
+	cl_mem				res_buffer;
+	size_t				global_size;
+	size_t				local_size;
+}						t_kernel;
 
 typedef struct	s_mlx
 {
 	void		*mlx;
 	void		*win;
 	void		*img;
-	double		xmin;
-	double		xmax;
-	double		ymin;
-	double		ymax;
-	double		power;
-	double		off_x;
-	double		off_y;
-	double		d;
-	double		scale;
+}				t_mlx;
+
+typedef struct	s_data
+{
 	int			height;
 	int			width;
 	int			*addr;
-	int			a;
-	int			b;
-	int			c;
 	char		abs_x;
 	char		abs_y;
 	char		sign_x;
 	char		sign_y;
-	uint64_t	lim;
-}				t_mlx;
+	double		power;
+	double		off_x;
+	double		off_y;
+	double		scale;
+}				t_data;
+
+typedef struct	s_all
+{
+	t_mlx		*p;
+	t_data		*d;
+	t_kernel	*k;
+}				t_all;
+
+void	start_kernel(t_all *a);
+void	run_kernel(t_all *a);
 
 #endif

@@ -1,15 +1,16 @@
 typedef struct	s_data
 {
-	int			width;
 	int			height;
-	double		power;//try float later
-	double		scale;
-	double		off_x;
-	double		off_y;
-	char		sign_x;
-	char		sign_y;
+	int			width;
+	int			*addr;
 	char		abs_x;
 	char		abs_y;
+	char		sign_x;
+	char		sign_y;
+	double		power;
+	double		off_x;
+	double		off_y;
+	double		scale;
 }				t_data;
 
 __kernel void add_number(__global t_data *input,
@@ -34,8 +35,6 @@ __kernel void add_number(__global t_data *input,
 		a = x;
 		b = y;
 		n = 0;
-		//t1 = mach_absolute_time();
-		//while ((t2 = (mach_absolute_time()) - t1) < input->lim)
 		while (n <= 1000)
 		{
 			a = input->abs_x == 'y' ? fabs(a) : a;
@@ -61,9 +60,7 @@ __kernel void add_number(__global t_data *input,
 		}
 		if (n == 1000)
 			output[id] = 0;
-			//input->addr[j * input->width + i] = 0;
 		else
 			output[id] = 0xFFFFFF / 1000 * n;
-			//input->addr[j * input->width + i] = 0xFFFFFF / 1000 * n;
 	}
 }
