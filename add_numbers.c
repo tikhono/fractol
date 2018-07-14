@@ -88,10 +88,10 @@ void	start_kernel(t_all *a)
 	program = build_program(context, device, PROGRAM_FILE);
 	a->k->global_size = 256;
 	a->k->local_size = 256;
-	a->k->input_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY |
-		 CL_MEM_COPY_HOST_PTR, sizeof(t_data), a->d, &err);
-	a->k->res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE |
-		 CL_MEM_COPY_HOST_PTR, sizeof(int) * 256, a->d->addr, &err);
+//	a->k->input_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY |
+//		 CL_MEM_COPY_HOST_PTR, sizeof(t_data), a->d, &err);
+//	a->k->res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE |
+//		 CL_MEM_COPY_HOST_PTR, sizeof(int) * 256, a->d->addr, &err);
 	if (err < 0)
 	{
 		perror("Couldn't create a buffer");
@@ -115,18 +115,21 @@ void	run_kernel(t_all *a)
 {
 	int		err;
 
-	err = clSetKernelArg(a->k->kernel, 0, sizeof(cl_mem), &a->k->input_buffer);
-	err |= clSetKernelArg(a->k->kernel, 1, sizeof(cl_mem), &a->k->res_buffer);
+//	err = clSetKernelArg(a->k->kernel, 0, sizeof(a->k->input_buffer), &a->k->input_buffer);
+	printf("1: %lu\n2: %lu\n", sizeof(*(a->d)), sizeof(t_data));
+	err = clSetKernelArg(a->k->kernel, 0, 48, (void*)a->d);
+//	err |= clSetKernelArg(a->k->kernel, 1, sizeof(cl_mem), &a->k->res_buffer);
 	if (err < 0)
 	{
+		printf("%d", err);
 		perror("Couldn't create a kernel argument");
 		exit(1);
 	}
+
+
 	printf("lol kek u have seg\n");
-
-
 	err = clEnqueueNDRangeKernel(a->k->queue, a->k->kernel, 1, NULL,\
-		   	(size_t *) (a->k->global_size), NULL, 0, NULL, NULL); 
+		   	&(a->k->global_size), NULL, 0, NULL, NULL); 
 	
 	
 	printf("lol kek u have seg\n");
@@ -135,8 +138,8 @@ void	run_kernel(t_all *a)
 		perror("Couldn't enqueue the kernel");
 		exit(1);
 	}
-	err = clEnqueueReadBuffer(a->k->queue, a->k->res_buffer, 1, 0, 
-		 sizeof(a->d->addr), a->d->addr, 0, NULL, NULL);
+//	err = clEnqueueReadBuffer(a->k->queue, a->k->res_buffer, 1, 0, 
+//		 sizeof(a->d->addr), a->d->addr, 0, NULL, NULL);
 	if (err < 0)
 	{
 		perror("Couldn't read the buffer");

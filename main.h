@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/13 13:20:20 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/14 17:00:55 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ typedef struct	s_data
 {
 	int			height;
 	int			width;
-	int			*addr;
 	char		abs_x;
 	char		abs_y;
 	char		sign_x;

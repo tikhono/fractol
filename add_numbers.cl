@@ -2,7 +2,6 @@ typedef struct	s_data
 {
 	int			height;
 	int			width;
-	int			*addr;
 	char		abs_x;
 	char		abs_y;
 	char		sign_x;
@@ -13,9 +12,10 @@ typedef struct	s_data
 	double		scale;
 }				t_data;
 
-__kernel void add_number(__global t_data *input,
-						 __global int *output)
+__kernel void add_number(t_data input)
 {
+	return ;
+/*
 	int		n;
 	int		id;
 	double	x;
@@ -26,6 +26,7 @@ __kernel void add_number(__global t_data *input,
 	double	phi;
 	double	pii;
 
+	return ;
 	id = get_global_id(0);
 	if (id < (input->height * input->width))
 	{
@@ -63,4 +64,5 @@ __kernel void add_number(__global t_data *input,
 		else
 			output[id] = 0xFFFFFF / 1000 * n;
 	}
+*/
 }
