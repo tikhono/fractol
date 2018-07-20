@@ -2,7 +2,7 @@ PROJ=add_numbers
 
 CC=gcc
 
-CFLAGS=-std=c99 -Wall -lmlx -DUNIX -g -DDEBUG
+CFLAGS=-std=c99 -Wall -DUNIX -g -DDEBUG
 
 # Check for 32-bit vs 64-bit
 PROC_TYPE = $(strip $(shell uname -m | grep 64))

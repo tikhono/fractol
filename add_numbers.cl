@@ -12,10 +12,8 @@ typedef struct	s_data
 	double		scale;
 }				t_data;
 
-__kernel void add_number(t_data input)
+__kernel void add_number(const t_data input, __global int *output)
 {
-	return ;
-/*
 	int		n;
 	int		id;
 	double	x;
@@ -26,22 +24,21 @@ __kernel void add_number(t_data input)
 	double	phi;
 	double	pii;
 
-	return ;
 	id = get_global_id(0);
-	if (id < (input->height * input->width))
+	if (id < (input.height * input.width))
 	{
-		d = 2.0 * input->scale / input->width;
-		y = -input->scale * input->height / input->width + input->off_x + (id / input->width) * d;
-		x = -input->scale + input->off_x + (id % input->width) * d;
+		d = 2.0 * input.scale / input.width;
+		y = -input.scale * input.height / input.width + input.off_x + (id / input.width) * d;
+		x = -input.scale + input.off_x + (id % input.width) * d;
 		a = x;
 		b = y;
 		n = 0;
 		while (n <= 1000)
 		{
-			a = input->abs_x == 'y' ? fabs(a) : a;
-			b = input->abs_y == 'y' ? fabs(b) : b;
-			a = input->sign_x == '+' ? a : -a;
-			b = input->sign_y == '+' ? b : -b;
+			a = input.abs_x == 'y' ? fabs(a) : a;
+			b = input.abs_y == 'y' ? fabs(b) : b;
+			a = input.sign_x == '+' ? a : -a;
+			b = input.sign_y == '+' ? b : -b;
 			if (a != 0.0 || b != 0.0)
 			{
 				pii = b < 0.0 ? - M_PI_F : M_PI_F;
@@ -49,9 +46,9 @@ __kernel void add_number(t_data input)
 					pii = 0.0;
 				if (a == 0.0)
 					pii /= 2.0;
-				phi = (atan(b / a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input->power;
-				a = pow(sqrt(a * a + b * b), input->power) * cos(phi);
-				b = pow(sqrt(a * a + b * b), input->power) * sin(phi);
+				phi = (atan(b / a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input.power;
+				a = pow(sqrt(a * a + b * b), input.power) * cos(phi);
+				b = pow(sqrt(a * a + b * b), input.power) * sin(phi);
 			}
 			a += x;//or julia point
 			b += y;	
@@ -64,5 +61,4 @@ __kernel void add_number(t_data input)
 		else
 			output[id] = 0xFFFFFF / 1000 * n;
 	}
-*/
 }

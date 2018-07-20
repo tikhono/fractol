@@ -2,7 +2,6 @@
 #define KERNEL_FUNC "add_number"
 #include "main.h"
 
-/* Find a GPU or CPU associated with the first available platform       */
 cl_device_id	create_device()
 {
 	cl_platform_id	platform;
@@ -11,7 +10,7 @@ cl_device_id	create_device()
 
 	err = clGetPlatformIDs(1, &platform, NULL);
 	if (err < 0) {
-		perror("Couldn't identify a platform");
+		printf("Couldn't identify a platform");
 		exit(1);
 	} 
 	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
@@ -19,7 +18,7 @@ cl_device_id	create_device()
 		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
 	}
 	if (err < 0) {
-		perror("Couldn't access any devices");
+		printf("Couldn't access any devices");
 		exit(1);
 	}
 	return dev;
@@ -34,9 +33,8 @@ cl_program build_program(cl_context ctx, cl_device_id dev, const char* filename)
 	int			err;
 
 	program_handle = fopen(filename, "r");
-	if (program_handle == NULL)
-	{
-		perror("Couldn't find the program file");
+	if (program_handle == NULL) {
+		printf("Couldn't find the program file");
 		exit(1);
 	}
 	fseek(program_handle, 0, SEEK_END);
@@ -48,9 +46,8 @@ cl_program build_program(cl_context ctx, cl_device_id dev, const char* filename)
 	fclose(program_handle);
 	program = clCreateProgramWithSource(ctx, 1, 
 		(const char**)&program_buffer, &program_size, &err);
-	if (err < 0)
-	{
-		perror("Couldn't create the program");
+	if (err < 0) {
+		printf("Couldn't create the program");
 		exit(1);
 	}
 	free(program_buffer);
@@ -82,31 +79,34 @@ void	start_kernel(t_all *a)
 	context = clCreateContext(NULL, 1, &device, NULL, NULL, &err);
 	if (err < 0)
 	{
-		perror("Couldn't create a context");
+		printf("Couldn't create a context");
 		exit(1);	
 	}
 	program = build_program(context, device, PROGRAM_FILE);
-	a->k->global_size = 256;
-	a->k->local_size = 256;
-//	a->k->input_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY |
-//		 CL_MEM_COPY_HOST_PTR, sizeof(t_data), a->d, &err);
-//	a->k->res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE |
-//		 CL_MEM_COPY_HOST_PTR, sizeof(int) * 256, a->d->addr, &err);
+	a->k->global_size = a->d->height * a->d->width;
+	a->k->local_size = 1;
+	a->k->input_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY |
+		 CL_MEM_COPY_HOST_PTR, sizeof(t_data), a->d, &err);
+	a->k->res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE |
+		 CL_MEM_COPY_HOST_PTR, sizeof(int) * a->k->global_size, a->addr, &err);
 	if (err < 0)
 	{
-		perror("Couldn't create a buffer");
+		printf("Couldn't create a buffer");
+		printf("\n%d\n", err);
 		exit(1);	
 	}
 	a->k->queue = clCreateCommandQueue(context, device, 0, &err);
 	if (err < 0)
 	{
-		perror("Couldn't create a command queue");
+		printf("Couldn't create a command queue");
+		printf("\n%d\n", err);
 		exit(1);	
 	}
 	a->k->kernel = clCreateKernel(program, KERNEL_FUNC, &err);
 	if (err < 0)
 	{
-		perror("Couldn't create a kernel");
+		printf("Couldn't create a kernel");
+		printf("\n%d\n", err);
 		exit(1);
 	}
 }
@@ -115,34 +115,28 @@ void	run_kernel(t_all *a)
 {
 	int		err;
 
-//	err = clSetKernelArg(a->k->kernel, 0, sizeof(a->k->input_buffer), &a->k->input_buffer);
-	printf("1: %lu\n2: %lu\n", sizeof(*(a->d)), sizeof(t_data));
-	err = clSetKernelArg(a->k->kernel, 0, 48, (void*)a->d);
-//	err |= clSetKernelArg(a->k->kernel, 1, sizeof(cl_mem), &a->k->res_buffer);
+	err = clSetKernelArg(a->k->kernel, 0, sizeof(cl_mem), &a->k->input_buffer);
+	err |= clSetKernelArg(a->k->kernel, 1, sizeof(cl_mem), &a->k->res_buffer);
 	if (err < 0)
 	{
-		printf("%d", err);
-		perror("Couldn't create a kernel argument");
+		printf("Couldn't create a kernel argument");
+		printf("\n%d\n", err);
 		exit(1);
 	}
-
-
-	printf("lol kek u have seg\n");
-	err = clEnqueueNDRangeKernel(a->k->queue, a->k->kernel, 1, NULL,\
-		   	&(a->k->global_size), NULL, 0, NULL, NULL); 
-	
-	
-	printf("lol kek u have seg\n");
+	err = clEnqueueNDRangeKernel(a->k->queue, a->k->kernel, 1, NULL,
+			&a->k->global_size, NULL, 0, NULL, NULL); 
 	if (err < 0)
 	{
-		perror("Couldn't enqueue the kernel");
+		printf("Couldn't enqueue the kernel");
+		printf("\n%d\n", err);
 		exit(1);
 	}
-//	err = clEnqueueReadBuffer(a->k->queue, a->k->res_buffer, 1, 0, 
-//		 sizeof(a->d->addr), a->d->addr, 0, NULL, NULL);
+	err = clEnqueueReadBuffer(a->k->queue, a->k->res_buffer, CL_TRUE, 0, 
+		 sizeof(int) * a->k->global_size, (void *) (a->addr), 0, NULL, NULL);
 	if (err < 0)
 	{
-		perror("Couldn't read the buffer");
+		printf("Couldn't read the buffer");
+		printf("\n%d\n", err);
 		exit(1);
 	}
 	mlx_put_image_to_window(a->p->mlx, a->p->win, a->p->img, 0, 0);

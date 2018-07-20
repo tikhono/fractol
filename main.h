@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/14 17:00:55 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/07/20 15:48:32 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,16 @@ typedef struct	s_mlx
 
 typedef struct	s_data
 {
-	int			height;
 	int			width;
-	char		abs_x;
-	char		abs_y;
-	char		sign_x;
-	char		sign_y;
+	int			height;
 	double		power;
+	double		scale;
 	double		off_x;
 	double		off_y;
-	double		scale;
+	char		sign_x;
+	char		sign_y;
+	char		abs_x;
+	char		abs_y;
 }				t_data;
 
 typedef struct	s_all
@@ -62,6 +62,7 @@ typedef struct	s_all
 	t_mlx		*p;
 	t_data		*d;
 	t_kernel	*k;
+	int			*addr;
 }				t_all;
 
 void	start_kernel(t_all *a);
