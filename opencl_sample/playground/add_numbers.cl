@@ -24,6 +24,7 @@ __kernel void add_number(__global t_data *input,
 	double	d;
 	double	phi;
 	double	pii;
+	double	z;
 
 	id = get_global_id(0);
 	d = 2.0 * input->scale / input->width;
@@ -45,9 +46,10 @@ __kernel void add_number(__global t_data *input,
 				pii = 0.0;
 			if (a == 0.0)
 				pii /= 2.0;
+			z = sqrt(a * a + b * b);
 			phi = (atan2(b, a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input->power;
-			a = pow(sqrt(a * a + b * b), input->power) * cos(phi);
-			b = pow(sqrt(a * a + b * b), input->power) * sin(phi);
+			a = pow(z, input->power) * cos(phi);
+			b = pow(z, input->power) * sin(phi);
 		}
 		a += x;//or julia point
 		b += y;	
