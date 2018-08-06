@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/20 17:08:53 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/06 16:55:45 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,29 @@ int		exit_mouse(void)
 int		call_hookers(int key, t_all *a)
 {
 	if (key == 123)
-		a->d->off_x -= 0.1 * a->d->scale; 
+		a->d.off_x -= 0.1 * a->d.scale; 
 	if (key == 124)
-		a->d->off_x += 0.1 * a->d->scale;
+		a->d.off_x += 0.1 * a->d.scale;
 	if (key == 125)
-		a->d->off_y += 0.1 * a->d->scale;
+		a->d.off_y += 0.1 * a->d.scale;
 	if (key == 126)
-		a->d->off_y -= 0.1 * a->d->scale;
+		a->d.off_y -= 0.1 * a->d.scale;
 	if (key == 0)
-		a->d->scale += 0.1 * a->d->scale;
+		a->d.scale += 0.1 * a->d.scale;
 	if (key == 1)
-		a->d->scale -= 0.1 * a->d->scale;
+		a->d.scale -= 0.1 * a->d.scale;
 	if (key == 12)
-		a->d->power += 0.1;
+		a->d.power += 0.1;
 	if (key == 13)
-		a->d->power -= 0.1;
+		a->d.power -= 0.1;
 	if (key == 18)
-		a->d->sign_x = a->d->sign_x == '+' ? '-' : '+';
+		a->d.sign_x = a->d.sign_x == '+' ? '-' : '+';
 	if (key == 19)
-		a->d->abs_x = a->d->abs_x == 'y' ? 'n' : 'y';
+		a->d.abs_x = a->d.abs_x == 'y' ? 'n' : 'y';
 	if (key == 20)
-		a->d->sign_y = a->d->sign_y == '+' ? '-' : '+';
+		a->d.sign_y = a->d.sign_y == '+' ? '-' : '+';
 	if (key == 21)
-		a->d->abs_y = a->d->abs_y == 'y' ? 'n' : 'y';
+		a->d.abs_y = a->d.abs_y == 'y' ? 'n' : 'y';
 	if (key == 53)
 		exit (0);
 	run_kernel(a);
@@ -56,20 +56,20 @@ void	initialise(t_all *a)
 	int		y;
 	int		z;
 
-	a->d->height = 2;
-	a->d->width = 2;
-	a->p->mlx = mlx_init();
-	a->p->win = mlx_new_window(a->p->mlx, a->d->width, a->d->height, "start");
-	a->p->img = mlx_new_image(a->p->mlx, a->d->width, a->d->height);
-	a->addr = (int *) mlx_get_data_addr(a->p->img, &x, &y, &z);
-	a->d->abs_x = 'n';
-	a->d->abs_y = 'n';
-	a->d->sign_x = '+';
-	a->d->sign_y = '+';
-	a->d->power = 2.0;
-	a->d->off_x = 0.0;
-	a->d->off_y = 0.0;
-	a->d->scale = 2.0;
+	a->d.height = 256;
+	a->d.width = 256;
+	a->p.mlx = mlx_init();
+	a->p.win = mlx_new_window(a->p.mlx, a->d.width, a->d.height, "start");
+	a->p.img = mlx_new_image(a->p.mlx, a->d.width, a->d.height);
+	a->addr = (int *) mlx_get_data_addr(a->p.img, &x, &y, &z);
+	a->d.abs_x = 'n';
+	a->d.abs_y = 'n';
+	a->d.sign_x = '+';
+	a->d.sign_y = '+';
+	a->d.power = 2.0;
+	a->d.off_x = 0.0;
+	a->d.off_y = 0.0;
+	a->d.scale = 2.0;
 	start_kernel(a);
 	run_kernel(a);
 }
@@ -80,11 +80,11 @@ int		main(void)
 	t_data	d;
 	t_all	a;
 
-	a.p = &p;
-	a.d = &d;
+	a.p = p;
+	a.d = d;
 	initialise(&a);
-	mlx_hook(p.win, 2, 5, call_hookers, &a);
-	mlx_hook(p.win, 17, 1L << 17, exit_mouse, 0);
-	mlx_loop(p.mlx);
+	mlx_hook(&p.win, 2, 5, call_hookers, &a);
+	mlx_hook(&p.win, 17, 1L << 17, exit_mouse, 0);
+	mlx_loop(&p.mlx);
 	return (0);
 }

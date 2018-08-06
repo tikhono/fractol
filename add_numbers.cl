@@ -1,18 +1,18 @@
 typedef struct	s_data
 {
-	int			height;
 	int			width;
-	char		abs_x;
-	char		abs_y;
-	char		sign_x;
-	char		sign_y;
+	int			height;
 	double		power;
+	double		scale;
 	double		off_x;
 	double		off_y;
-	double		scale;
+	char		sign_x;
+	char		sign_y;
+	char		abs_x;
+	char		abs_y;
 }				t_data;
 
-__kernel void add_number(const t_data input, __global int *output)
+__kernel void add_number(t_data input, __global int *output)
 {
 	int		n;
 	int		id;
@@ -23,42 +23,42 @@ __kernel void add_number(const t_data input, __global int *output)
 	double	d;
 	double	phi;
 	double	pii;
+	double	z;
 
 	id = get_global_id(0);
-	if (id < (input.height * input.width))
+	d = 2.0 * input.scale / input.width;
+	y = input.scale * input.height / input.width + input.off_y + (id / input.width) * d;
+	x = input.scale + input.off_x + (id % input.width) * d;
+	a = x;
+	b = y;
+	n = 0;
+	while (n < 100)
 	{
-		d = 2.0 * input.scale / input.width;
-		y = -input.scale * input.height / input.width + input.off_x + (id / input.width) * d;
-		x = -input.scale + input.off_x + (id % input.width) * d;
-		a = x;
-		b = y;
-		n = 0;
-		while (n <= 1000)
+		a = input.abs_x == 'y' ? fabs(a) : a;
+		b = input.abs_y == 'y' ? fabs(b) : b;
+		a = input.sign_x == '+' ? a : -a;
+		b = input.sign_y == '+' ? b : -b;
+		if (a != 0.0 || b != 0.0)
 		{
-			a = input.abs_x == 'y' ? fabs(a) : a;
-			b = input.abs_y == 'y' ? fabs(b) : b;
-			a = input.sign_x == '+' ? a : -a;
-			b = input.sign_y == '+' ? b : -b;
-			if (a != 0.0 || b != 0.0)
-			{
-				pii = b < 0.0 ? - M_PI_F : M_PI_F;
-				if (a > 0.0)
-					pii = 0.0;
-				if (a == 0.0)
-					pii /= 2.0;
-				phi = (atan(b / a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input.power;
-				a = pow(sqrt(a * a + b * b), input.power) * cos(phi);
-				b = pow(sqrt(a * a + b * b), input.power) * sin(phi);
-			}
-			a += x;//or julia point
-			b += y;	
-			if (a * a + b * b > 4.0)
-				break;
-			++n;
+			pii = b < 0.0 ? - M_PI_F : M_PI_F;
+			if (a > 0.0)
+				pii = 0.0;
+			if (a == 0.0)
+				pii /= 2.0;
+			z = sqrt(a * a + b * b);
+			phi = (atan2(b, a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input.power;
+			a = pow(z, input.power) * cos(phi);
+			b = pow(z, input.power) * sin(phi);
 		}
-		if (n == 1000)
-			output[id] = 0;
-		else
-			output[id] = 0xFFFFFF / 1000 * n;
+		a += x;//or julia point
+		b += y;	
+		if (a * a + b * b > 4.0)
+			break;
+		++n;
 	}
+	if (n == 100)
+		output[id] = 0;
+	else
+		output[id] = 0xFFFFFF / 100 * n;
+	printf("%d\t", output[id]);
 }

@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/07/20 15:48:32 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/02 16:36:37 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ typedef struct	s_data
 
 typedef struct	s_all
 {
-	t_mlx		*p;
-	t_data		*d;
-	t_kernel	*k;
+	t_mlx		p;
+	t_data		d;
+	t_kernel	k;
 	int			*addr;
 }				t_all;
 
