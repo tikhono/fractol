@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/07 13:50:29 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/07 14:35:46 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int		call_hookers(int key, t_all *a)
 	if (key == 1)
 		a->d.scale -= 0.1 * a->d.scale;
 	if (key == 12)
-		a->d.power += 0.01;
-	if (key == 13)
 		a->d.power -= 0.01;
+	if (key == 13)
+		a->d.power += 0.01;
 	if (key == 18)
 		a->d.sign_x = a->d.sign_x == '+' ? '-' : '+';
 	if (key == 19)
