@@ -27,8 +27,8 @@ __kernel void add_number(t_data input, __global int *output)
 
 	id = get_global_id(0);
 	d = 2.0 * input.scale / input.width;
-	y = input.scale * input.height / input.width + input.off_y + (id / input.width) * d;
-	x = input.scale + input.off_x + (id % input.width) * d;
+	y = -input.scale * input.height / input.width + input.off_y + (id / input.width) * d;
+	x = -input.scale + input.off_x + (id % input.width) * d;
 	a = x;
 	b = y;
 	n = 0;
@@ -60,5 +60,4 @@ __kernel void add_number(t_data input, __global int *output)
 		output[id] = 0;
 	else
 		output[id] = 0xFFFFFF / 100 * n;
-	printf("%d\t", output[id]);
 }

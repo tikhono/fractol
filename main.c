@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/06 16:55:45 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/07 11:46:20 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void	initialise(t_all *a)
 	int		y;
 	int		z;
 
-	a->d.height = 256;
-	a->d.width = 256;
+	a->d.width = 1024;
+	a->d.height = 720;
 	a->p.mlx = mlx_init();
 	a->p.win = mlx_new_window(a->p.mlx, a->d.width, a->d.height, "start");
 	a->p.img = mlx_new_image(a->p.mlx, a->d.width, a->d.height);
@@ -83,8 +83,8 @@ int		main(void)
 	a.p = p;
 	a.d = d;
 	initialise(&a);
-	mlx_hook(&p.win, 2, 5, call_hookers, &a);
-	mlx_hook(&p.win, 17, 1L << 17, exit_mouse, 0);
-	mlx_loop(&p.mlx);
+	mlx_hook(a.p.win, 2, 5, call_hookers, &a);
+	mlx_hook(a.p.win, 17, 1L << 17, exit_mouse, 0);
+	mlx_loop(a.p.mlx);
 	return (0);
 }
