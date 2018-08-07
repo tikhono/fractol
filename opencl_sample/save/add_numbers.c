@@ -1,19 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   add_numbers.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/11 15:32:35 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/03 14:21:32 by atikhono         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #define PROGRAM_FILE "add_numbers.cl"
 #define KERNEL_FUNC "add_number"
 #include "main.h"
-#include <OpenCL/cl.h>
 
 cl_device_id	create_device()
 {
@@ -26,9 +13,9 @@ cl_device_id	create_device()
 		printf("Couldn't identify a platform");
 		exit(1);
 	} 
-	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
+	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
 	if (err == CL_DEVICE_NOT_FOUND) {
-		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
+		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
 	}
 	if (err < 0) {
 		printf("Couldn't access any devices");
@@ -79,101 +66,86 @@ cl_program build_program(cl_context ctx, cl_device_id dev, const char* filename)
 	return program;
 }
 
-int main()
+void	start_kernel(t_all *a)
 {
+	t_kernel			k;
 	cl_device_id		device;
 	cl_context			context;
 	cl_program			program;
-	cl_kernel			kernel;
-	cl_command_queue	queue;
-	size_t				local_size, global_size;
-	t_data				data;
 	int					err;
-	cl_mem				input_buffer, res_buffer;
-	cl_int				num_groups;
-	void				*mlx;
-	void				*win;
-	void				*img;
-	int					a;
-	int					b;
-	int					c;
-	int					*addr;
 
-	data.width = 1200;
-	data.height = 600;
-	data.power = 2.0;
-	data.scale = 5.0;
-	data.off_x = 0.0;
-	data.off_y = 0.0;
-	data.sign_x = '+';
-	data.sign_y = '+';
-	data.abs_x = 'n';
-	data.abs_y = 'n';
-
-	mlx = mlx_init();
-	win = mlx_new_window(mlx, data.width, data.height, "lol");
-	img = mlx_new_image(mlx, data.width, data.height);
-	addr = (int *)mlx_get_data_addr(img, &a, &b, &c);
+	a->k = k;
 	device = create_device();
 	context = clCreateContext(NULL, 1, &device, NULL, NULL, &err);
-	if (err < 0) {
+	if (err < 0)
+	{
 		printf("Couldn't create a context");
 		exit(1);	
 	}
 	program = build_program(context, device, PROGRAM_FILE);
-	global_size = 1200*600;
-	local_size = 1;
-	num_groups = global_size/local_size;
-	input_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY |
-		 CL_MEM_COPY_HOST_PTR, sizeof(t_data), &data, &err);
-	res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE |
-		 CL_MEM_COPY_HOST_PTR, sizeof(int) * 1200 * 600, addr, &err);
-	if (err < 0) {
+	a->k.global_size = a->d.height * a->d.width;
+	a->k.local_size = 1;
+	//	a->k.input_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(t_data), &a->d, &err);
+	a->k.res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE|
+			CL_MEM_USE_HOST_PTR, sizeof(int) * a->k.global_size, a->addr, &err);
+	if (err < 0)
+	{
 		printf("Couldn't create a buffer");
 		printf("\n%d\n", err);
 		exit(1);	
-	};
-	queue = clCreateCommandQueue(context, device, 0, &err);
-	if (err < 0) {
+	}
+	a->k.queue = clCreateCommandQueue(context, device, 0, &err);
+	if (err < 0)
+	{
 		printf("Couldn't create a command queue");
 		printf("\n%d\n", err);
 		exit(1);	
-	};
-	kernel = clCreateKernel(program, KERNEL_FUNC, &err);
-	if (err < 0) {
+	}
+	a->k.kernel = clCreateKernel(program, KERNEL_FUNC, &err);
+	if (err < 0)
+	{
 		printf("Couldn't create a kernel");
 		printf("\n%d\n", err);
 		exit(1);
-	};
-	err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input_buffer);
-	err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &res_buffer);
-	if (err < 0) {
+	}
+}
+
+void	run_kernel(t_all *a)
+{
+	int		err;
+
+	err = clSetKernelArg(a->k.kernel, 0, sizeof(t_data), &a->d);
+	err |= clSetKernelArg(a->k.kernel, 1, sizeof(cl_mem), &a->k.res_buffer);
+	if (err < 0)
+	{
 		printf("Couldn't create a kernel argument");
 		printf("\n%d\n", err);
 		exit(1);
 	}
-	err = clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_size, 
-		 &local_size, 0, NULL, NULL); 
-	if (err < 0) {
-		printf("Couldn't enqueue the kernel: %d", err);
+	err = clEnqueueNDRangeKernel(a->k.queue, a->k.kernel, 1, NULL,
+			&a->k.global_size, NULL, 0, NULL, NULL); 
+	if (err < 0)
+	{
+		printf("Couldn't enqueue the kernel");
 		printf("\n%d\n", err);
 		exit(1);
 	}
-	err = clEnqueueReadBuffer(queue, res_buffer, CL_TRUE, 0, 
-		 sizeof(int) * 1200 * 600, addr, 0, NULL, NULL);
-	if (err < 0 ) {
+	err = clEnqueueReadBuffer(a->k.queue, a->k.res_buffer, CL_TRUE, 0, 
+		 sizeof(int) * a->k.global_size, a->addr, 0, NULL, NULL);
+	if (err < 0)
+	{
 		printf("Couldn't read the buffer");
 		printf("\n%d\n", err);
 		exit(1);
 	}
-
-	mlx_put_image_to_window(mlx, win, img, 0, 0);
-	mlx_loop(mlx);
-	clReleaseKernel(kernel);
-	clReleaseMemObject(res_buffer);
-	clReleaseMemObject(input_buffer);
-	clReleaseCommandQueue(queue);
-	clReleaseProgram(program);
-	clReleaseContext(context);
-	return 0;
+	mlx_put_image_to_window(a->p.mlx, a->p.win, a->p.img, 0, 0);
 }
+/*	
+ *	Deallocate resources 
+ *	clReleaseKernel(kernel);
+ *	clReleaseMemObject(res_buffer);
+ *	clReleaseMemObject(input_buffer);
+ *	clReleaseCommandQueue(queue);
+ *	clReleaseProgram(program);
+ *	clReleaseContext(context);
+ */

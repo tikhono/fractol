@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
+/*   Updated: 2018/08/02 16:36:37 by atikhono         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAIN_H
 # define MAIN_H
 # include <fcntl.h>
@@ -5,7 +17,6 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <string.h>
 # include <time.h>
 # include <unistd.h>
 # include <assert.h>
@@ -13,12 +24,30 @@
 # include <mach/mach.h>
 # include <mach/mach_time.h>
 # include <unistd.h>
+# include <OpenCL/cl.h>
+
+typedef struct	s_kernel
+{
+	cl_kernel			kernel;
+	cl_command_queue	queue;
+	cl_mem				input_buffer;
+	cl_mem				res_buffer;
+	size_t				global_size;
+	size_t				local_size;
+}						t_kernel;
+
+typedef struct	s_mlx
+{
+	void		*mlx;
+	void		*win;
+	void		*img;
+}				t_mlx;
 
 typedef struct	s_data
 {
 	int			width;
 	int			height;
-	double		power;//try float later
+	double		power;
 	double		scale;
 	double		off_x;
 	double		off_y;
@@ -27,5 +56,16 @@ typedef struct	s_data
 	char		abs_x;
 	char		abs_y;
 }				t_data;
+
+typedef struct	s_all
+{
+	t_mlx		p;
+	t_data		d;
+	t_kernel	k;
+	int			*addr;
+}				t_all;
+
+void	start_kernel(t_all *a);
+void	run_kernel(t_all *a);
 
 #endif
