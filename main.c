@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/07 15:26:34 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/08 14:20:22 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,18 @@ void	initialise(t_all *a)
 	run_kernel(a);
 }
 
-int		main(void)
+int		main(int ac, char **av)
 {
 	t_mlx	p;
 	t_data	d;
 	t_all	a;
 
+	while (ac > 2)
+		if (fork() != 0)
+			--ac;
+		else
+			break ;
+	--ac;
 	a.p = p;
 	a.d = d;
 	initialise(&a);

@@ -40,7 +40,7 @@ __kernel void add_number(t_data input, __global int *output)
 		b = input.sign_y == '+' ? b : -b;
 		if (a != 0.0 || b != 0.0)
 		{
-			pii = b < 0.0 ? - M_PI_F : M_PI_F;
+			pii = b < 0.0 ? -M_PI_F : M_PI_F;
 			if (a > 0.0)
 				pii = 0.0;
 			if (a == 0.0)
