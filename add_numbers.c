@@ -84,7 +84,7 @@ void	start_kernel(t_all *a)
 	}
 	program = build_program(context, device, PROGRAM_FILE);
 	a->k.global_size = a->d.height * a->d.width;
-	a->k.local_size = 1;
+	a->k.local_size = 0;
 	//	a->k.input_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(t_data), &a->d, &err);
 	a->k.res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE|
 			CL_MEM_USE_HOST_PTR, sizeof(int) * a->k.global_size, a->addr, &err);
