@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/02 16:36:37 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/08 15:49:54 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct	s_data
 {
 	int			width;
 	int			height;
+	int			m_pos_x;
+	int			m_pos_y;
 	double		power;
 	double		scale;
 	double		off_x;
@@ -55,6 +57,7 @@ typedef struct	s_data
 	char		sign_y;
 	char		abs_x;
 	char		abs_y;
+	char		constant;
 }				t_data;
 
 typedef struct	s_all

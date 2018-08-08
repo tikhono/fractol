@@ -2,6 +2,8 @@ typedef struct	s_data
 {
 	int			width;
 	int			height;
+	int			m_pos_x;
+	int			m_pos_y;
 	double		power;
 	double		scale;
 	double		off_x;
@@ -10,6 +12,7 @@ typedef struct	s_data
 	char		sign_y;
 	char		abs_x;
 	char		abs_y;
+	char		con;
 }				t_data;
 
 __kernel void add_number(t_data input, __global int *output)
@@ -27,10 +30,19 @@ __kernel void add_number(t_data input, __global int *output)
 
 	id = get_global_id(0);
 	d = 2.0 * input.scale / input.width;
-	y = -input.scale * input.height / input.width + input.off_y + (id / input.width) * d;
 	x = -input.scale + input.off_x + (id % input.width) * d;
+	y = -input.scale * input.height / input.width + input.off_y + (id / input.width) * d;
 	a = x;
 	b = y;
+	if (input.con == 'y')
+	{
+	//	x = input.m_pos_x;
+	//	y = input.m_pos_y;
+		x = -input.scale + input.off_x + input.m_pos_x * d;
+		y = -input.scale * input.height / input.width + input.off_y + input.m_pos_y * d;
+	//	x = 0.1;
+	//	y = 0.2;
+	}
 	n = 0;
 	while (n < 100)
 	{
