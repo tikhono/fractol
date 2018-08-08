@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/08 16:19:17 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/08 16:45:37 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,10 @@ int		mouse_click(int key, int x, int y, t_all *a)
 
 int		mouse_move(int x, int y, t_all *a)
 {
-//	printf("moved to %d %d\n", x, y);
+	a->d.m_pos_x = x;
+	a->d.m_pos_y = y;
 	if (a->d.constant == 'y')
-	{
-		a->d.m_pos_x = x;
-		a->d.m_pos_y = y;
 		run_kernel(a);
-	}
 	return (0);
 }
 
@@ -95,8 +92,8 @@ void	initialise(t_all *a)
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
 	a->d.scale = 2.0;
-	a->d.m_pos_x = 0;
-	a->d.m_pos_y = 0;
+	a->d.m_pos_x = 0.0;
+	a->d.m_pos_y = 0.0;
 	start_kernel(a);
 	run_kernel(a);
 }
