@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/08 15:49:54 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/09 11:29:14 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct	s_all
 	t_data		d;
 	t_kernel	k;
 	int			*addr;
+	char		fix;
 }				t_all;
 
 void	start_kernel(t_all *a);

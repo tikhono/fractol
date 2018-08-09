@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/08 16:45:37 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/09 11:35:43 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,25 @@ int		call_hookers(int key, t_all *a)
 
 int		mouse_click(int key, int x, int y, t_all *a)
 {
-//	printf("mouse key clicked %d\n", key);
-//	printf("position is %d %d\n", x, y);
-	a->d.m_pos_x = x;
-	a->d.m_pos_y = y;
-	run_kernel(a);
+	if (key == 1)
+		a->fix = a->fix == 'y' ? 'n' : 'y';
+	if (a->fix == 'n')
+	{
+		a->d.m_pos_x = x;
+		a->d.m_pos_y = y;
+	}
+	if (a->d.constant == 'y')
+		run_kernel(a);
 	return (0);
 }
 
 int		mouse_move(int x, int y, t_all *a)
 {
-	a->d.m_pos_x = x;
-	a->d.m_pos_y = y;
+	if (a->fix == 'n')
+	{
+		a->d.m_pos_x = x;
+		a->d.m_pos_y = y;
+	}
 	if (a->d.constant == 'y')
 		run_kernel(a);
 	return (0);
@@ -88,6 +95,7 @@ void	initialise(t_all *a)
 	a->d.sign_x = '+';
 	a->d.sign_y = '+';
 	a->d.constant = 'n';
+	a->fix = 'n';
 	a->d.power = 2.0;
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
