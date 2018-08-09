@@ -18,6 +18,7 @@ typedef struct	s_data
 __kernel void add_number(t_data input, __global int *output)
 {
 	int		n;
+	int		lim;
 	int		id;
 	double	x;
 	double	y;
@@ -40,7 +41,8 @@ __kernel void add_number(t_data input, __global int *output)
 		y = -input.scale * input.height / input.width + (input.off_y + input.m_pos_y) * d;
 	}
 	n = 0;
-	while (n < 100)
+	lim = 50;
+	while (n < lim)
 	{
 		a = input.abs_x == 'y' ? fabs(a) : a;
 		b = input.abs_y == 'y' ? fabs(b) : b;
@@ -64,8 +66,8 @@ __kernel void add_number(t_data input, __global int *output)
 			break;
 		++n;
 	}
-	if (n == 100)
+	if (n == lim)
 		output[id] = 0;
 	else
-		output[id] = 0xFFFFFF / 100 * n;
+		output[id] = 0xFFFFFF / lim * n;
 }

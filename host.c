@@ -1,4 +1,4 @@
-#define PROGRAM_FILE "add_numbers.cl"
+#define PROGRAM_FILE "kernel.cl"
 #define KERNEL_FUNC "add_number"
 #include "main.h"
 
@@ -13,9 +13,9 @@ cl_device_id	create_device()
 		printf("Couldn't identify a platform");
 		exit(1);
 	} 
-	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
+	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
 	if (err == CL_DEVICE_NOT_FOUND) {
-		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
+		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
 	}
 	if (err < 0) {
 		printf("Couldn't access any devices");
@@ -84,7 +84,7 @@ void	start_kernel(t_all *a)
 	}
 	program = build_program(context, device, PROGRAM_FILE);
 	a->k.global_size = a->d.height * a->d.width;
-	a->k.local_size = 0;
+	a->k.local_size = 256;
 	//	a->k.input_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, sizeof(t_data), &a->d, &err);
 	a->k.res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE|
 			CL_MEM_USE_HOST_PTR, sizeof(int) * a->k.global_size, a->addr, &err);
