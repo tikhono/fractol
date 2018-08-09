@@ -36,8 +36,8 @@ __kernel void add_number(t_data input, __global int *output)
 	b = y;
 	if (input.con == 'y')
 	{
-		x = -input.scale + input.off_x + input.m_pos_x * d;
-		y = -input.scale * input.height / input.width + input.off_y + input.m_pos_y * d;
+		x = -input.scale + (input.off_x + input.m_pos_x) * d;
+		y = -input.scale * input.height / input.width + (input.off_y + input.m_pos_y) * d;
 	}
 	n = 0;
 	while (n < 100)

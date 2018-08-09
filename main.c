@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/09 11:35:43 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/09 11:55:58 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@ int		call_hookers(int key, t_all *a)
 		a->d.off_y += 0.1 * a->d.scale;
 	if (key == 126)
 		a->d.off_y -= 0.1 * a->d.scale;
-	if (key == 0)
-		a->d.scale += 0.1 * a->d.scale;
-	if (key == 1)
-		a->d.scale -= 0.1 * a->d.scale;
 	if (key == 12)
 		a->d.power -= 0.01;
 	if (key == 13)
@@ -50,13 +46,16 @@ int		mouse_click(int key, int x, int y, t_all *a)
 {
 	if (key == 1)
 		a->fix = a->fix == 'y' ? 'n' : 'y';
+	if (key == 4)
+		a->d.scale -= 0.1 * a->d.scale;
+	if (key == 5)
+		a->d.scale += 0.1 * a->d.scale;
 	if (a->fix == 'n')
 	{
 		a->d.m_pos_x = x;
 		a->d.m_pos_y = y;
 	}
-	if (a->d.constant == 'y')
-		run_kernel(a);
+	run_kernel(a);
 	return (0);
 }
 
@@ -67,8 +66,7 @@ int		mouse_move(int x, int y, t_all *a)
 		a->d.m_pos_x = x;
 		a->d.m_pos_y = y;
 	}
-	if (a->d.constant == 'y')
-		run_kernel(a);
+	run_kernel(a);
 	return (0);
 }
 
