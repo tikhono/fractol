@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:27:07 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 11:30:51 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/10 12:02:52 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		call_hookers(int key, t_all *a)
 {
 	if (key == 123)
-		a->d.off_x -= 0.1 * a->d.scale; 
+		a->d.off_x -= 0.1 * a->d.scale;
 	if (key == 124)
 		a->d.off_x += 0.1 * a->d.scale;
 	if (key == 125)
@@ -37,9 +37,8 @@ int		call_hookers(int key, t_all *a)
 	if (key == 48)
 		a->d.constant = a->d.constant == 'y' ? 'n' : 'y';
 	if (key == 53)
-		exit (0);
-	run_kernel(a);
-	return (0);
+		exit(0);
+	return (run_kernel(a));
 }
 
 int		mouse_click(int key, int x, int y, t_all *a)
@@ -55,8 +54,7 @@ int		mouse_click(int key, int x, int y, t_all *a)
 		a->d.m_pos_x = x;
 		a->d.m_pos_y = y;
 	}
-	run_kernel(a);
-	return (0);
+	return (run_kernel(a));
 }
 
 int		mouse_move(int x, int y, t_all *a)
@@ -66,8 +64,7 @@ int		mouse_move(int x, int y, t_all *a)
 		a->d.m_pos_x = x;
 		a->d.m_pos_y = y;
 	}
-	run_kernel(a);
-	return (0);
+	return (run_kernel(a));
 }
 
 int		exit_mouse(void)
@@ -75,4 +72,3 @@ int		exit_mouse(void)
 	exit(0);
 	return (0);
 }
-
