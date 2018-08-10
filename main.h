@@ -6,24 +6,15 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 13:03:19 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/10 13:36:53 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
-# include <fcntl.h>
 # include <mlx.h>
 # include <math.h>
 # include <stdio.h>
-# include <stdlib.h>
-# include <time.h>
-# include <unistd.h>
-# include <assert.h>
-# include <CoreServices/CoreServices.h>
-# include <mach/mach.h>
-# include <mach/mach_time.h>
-# include <unistd.h>
 # include <OpenCL/cl.h>
 # include "./libft/libft.h"
 
