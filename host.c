@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:50:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 12:01:52 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/10 13:31:17 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,15 @@ cl_device_id	create_device(void)
 	err = clGetPlatformIDs(1, &platform, NULL);
 	if (err < 0)
 	{
-		printf("Couldn't identify a platform");
+		ft_putendl("Couldn't identify a platform");
 		exit(1);
 	}
 	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
 	if (err == CL_DEVICE_NOT_FOUND)
-	{
 		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
-	}
 	if (err < 0)
 	{
-		printf("Couldn't access any devices");
+		ft_putendl("Couldn't access any devices");
 		exit(1);
 	}
 	return (dev);
@@ -52,7 +50,7 @@ cl_program		build_program(cl_context ctx, cl_device_id dev, const char *filename
 	program_handle = fopen(filename, "r");
 	if (program_handle == NULL)
 	{
-		printf("Couldn't find the program file");
+		ft_putendl("Couldn't find the program file");
 		exit(1);
 	}
 	fseek(program_handle, 0, SEEK_END);
@@ -66,7 +64,7 @@ cl_program		build_program(cl_context ctx, cl_device_id dev, const char *filename
 			(const char**)&program_buffer, &program_size, &err);
 	if (err < 0)
 	{
-		printf("Couldn't create the program");
+		ft_putendl("Couldn't create the program");
 		exit(1);
 	}
 	free(program_buffer);
@@ -79,7 +77,7 @@ cl_program		build_program(cl_context ctx, cl_device_id dev, const char *filename
 		program_log[log_size] = '\0';
 		clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG,
 				log_size + 1, program_log, NULL);
-		printf("%s\n", program_log);
+		ft_putendl(program_log);
 		free(program_log);
 		exit(1);
 	}
@@ -99,7 +97,7 @@ void			start_kernel(t_all *a)
 	context = clCreateContext(NULL, 1, &device, NULL, NULL, &err);
 	if (err < 0)
 	{
-		printf("Couldn't create a context");
+		ft_putendl("Couldn't create a context");
 		exit(1);
 	}
 	program = build_program(context, device, PROGRAM_FILE);
@@ -109,22 +107,22 @@ void			start_kernel(t_all *a)
 			CL_MEM_USE_HOST_PTR, sizeof(int) * a->k.global_size, a->addr, &err);
 	if (err < 0)
 	{
-		printf("Couldn't create a buffer");
-		printf("\n%d\n", err);
+		ft_putendl("Couldn't create a buffer");
+		ft_putnbr(err);
 		exit(1);
 	}
 	a->k.queue = clCreateCommandQueue(context, device, 0, &err);
 	if (err < 0)
 	{
-		printf("Couldn't create a command queue");
-		printf("\n%d\n", err);
+		ft_putendl("Couldn't create a command queue");
+		ft_putnbr(err);
 		exit(1);
 	}
 	a->k.kernel = clCreateKernel(program, KERNEL_FUNC, &err);
 	if (err < 0)
 	{
-		printf("Couldn't create a kernel");
-		printf("\n%d\n", err);
+		ft_putendl("Couldn't create a kernel");
+		ft_putnbr(err);
 		exit(1);
 	}
 }
@@ -137,24 +135,24 @@ int				run_kernel(t_all *a)
 	err |= clSetKernelArg(a->k.kernel, 1, sizeof(cl_mem), &a->k.res_buffer);
 	if (err < 0)
 	{
-		printf("Couldn't create a kernel argument");
-		printf("\n%d\n", err);
+		ft_putendl("Couldn't create a kernel argument");
+		ft_putnbr(err);
 		exit(1);
 	}
 	err = clEnqueueNDRangeKernel(a->k.queue, a->k.kernel, 1, NULL,
 			&a->k.global_size, NULL, 0, NULL, NULL);
 	if (err < 0)
 	{
-		printf("Couldn't enqueue the kernel");
-		printf("\n%d\n", err);
+		ft_putendl("Couldn't enqueue the kernel");
+		ft_putnbr(err);
 		exit(1);
 	}
 	err = clEnqueueReadBuffer(a->k.queue, a->k.res_buffer, CL_TRUE, 0,
 			sizeof(int) * a->k.global_size, a->addr, 0, NULL, NULL);
 	if (err < 0)
 	{
-		printf("Couldn't read the buffer");
-		printf("\n%d\n", err);
+		ft_putendl("Couldn't read the buffer");
+		ft_putnbr(err);
 		exit(1);
 	}
 	mlx_put_image_to_window(a->p.mlx, a->p.win, a->p.img, 0, 0);
