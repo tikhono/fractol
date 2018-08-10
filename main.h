@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/09 11:29:14 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/10 11:26:38 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ typedef struct	s_all
 	char		fix;
 }				t_all;
 
+int		call_hookers(int key, t_all *a);
+int		mouse_click(int key, int x, int y, t_all *a);
+int		mouse_move(int x, int y, t_all *a);
+int		exit_mouse(void);
 void	start_kernel(t_all *a);
 void	run_kernel(t_all *a);
 

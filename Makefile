@@ -6,15 +6,17 @@
 #    By: atikhono <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/01 17:15:51 by atikhono          #+#    #+#              #
-#    Updated: 2018/08/09 16:08:14 by atikhono         ###   ########.fr        #
+#    Updated: 2018/08/10 11:29:48 by atikhono         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
 LIBNAME = ./libft/libft.a
+LIB_DIR = libft/
 
 OBJ = $(SRC:.c=.o)
+OBJ_DIR = obj/
 
 FLAGS = -Wfatal-errors
 
@@ -25,7 +27,8 @@ MLX = -lmlx -framework AppKit -framework OpenGL
 OPENCL = -framework OpenCL
 
 SRC =	main.c\
-		host.c
+		host.c\
+		hookers.c
 
 all: liball $(NAME)
 
