@@ -56,7 +56,7 @@ __kernel void add_number(t_data input, __global int *output)
 			if (a == 0.0)
 				pii /= 2.0;
 			z = pow(sqrt(a * a + b * b), input.power);
-			phi = (atan2(b, a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input.power;
+			phi = (atan(b / a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input.power;
 			a = z * cos(phi);
 			b = z * sin(phi);
 		}
