@@ -6,17 +6,15 @@
 #    By: atikhono <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/01 17:15:51 by atikhono          #+#    #+#              #
-#    Updated: 2018/08/10 11:29:48 by atikhono         ###   ########.fr        #
+#    Updated: 2018/08/10 13:22:53 by atikhono         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fractol
 
 LIBNAME = ./libft/libft.a
-LIB_DIR = libft/
 
 OBJ = $(SRC:.c=.o)
-OBJ_DIR = obj/
 
 FLAGS = -Wfatal-errors
 
@@ -51,12 +49,12 @@ re: fclean all
 $(LIBNAME): liball
 
 liball:
-	@make -C ./libft all
+	@make -C ./libft all --silent
 
 libclean:
-	@make -C ./libft clean
+	@make -C ./libft clean --silent
 
 libfclean:
-	@make -C ./libft fclean
+	@make -C ./libft fclean --silent
 
 libre: libfclean liball
