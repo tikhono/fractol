@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 12:25:48 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/10 13:05:34 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	julia_set_init(t_all *a)
 
 void	print_help(void)
 {
-	printf("lol\n");
+	ft_putendl("Usage:\n./fractol mandelbrot_set julia_set burning_ship");
 	exit(0);
 }
 

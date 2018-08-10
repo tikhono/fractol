@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 12:26:18 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/10 13:03:19 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <mach/mach_time.h>
 # include <unistd.h>
 # include <OpenCL/cl.h>
-#include "./libft/libft.h"
+# include "./libft/libft.h"
 
 typedef struct			s_kernel
 {
