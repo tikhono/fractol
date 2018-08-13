@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:50:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 13:31:17 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/13 11:37:14 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ cl_device_id	create_device(void)
 		ft_putendl("Couldn't identify a platform");
 		exit(1);
 	}
-	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
+	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
 	if (err == CL_DEVICE_NOT_FOUND)
-		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
+		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
 	if (err < 0)
 	{
 		ft_putendl("Couldn't access any devices");

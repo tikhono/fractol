@@ -13,6 +13,7 @@ typedef struct	s_data
 	char		abs_x;
 	char		abs_y;
 	char		con;
+	char		state;
 }				t_data;
 
 __kernel void add_number(t_data input, __global int *output)
@@ -37,8 +38,16 @@ __kernel void add_number(t_data input, __global int *output)
 	b = y;
 	if (input.con == 'y')
 	{
-		x = -input.scale + (input.off_x + input.m_pos_x) * d;
-		y = -input.scale * input.height / input.width + (input.off_y + input.m_pos_y) * d;
+		if (input.state == 'y')
+		{
+			x = -input.scale + (input.off_x + input.m_pos_x) * d;
+			y = -input.scale * input.height / input.width + (input.off_y + input.m_pos_y) * d;
+		}
+		else
+		{
+			x = input.off_x * d + (input.m_pos_x * 4.0  / input.width -  2.0);	
+			y = input.off_y * d + (input.m_pos_y * 4.0  / input.height -  2.0);
+		}
 	}
 	n = 0;
 	lim = 50;
@@ -60,7 +69,7 @@ __kernel void add_number(t_data input, __global int *output)
 			a = z * cos(phi);
 			b = z * sin(phi);
 		}
-		a += x;//or julia point
+		a += x;
 		b += y;	
 		if (a * a + b * b > 4.0)
 			break;

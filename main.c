@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 13:05:34 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/13 13:35:54 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	mandelbrot_set_init(t_all *a)
 	int		y;
 	int		z;
 
-	a->d.width = 512;
+	a->d.width = 1024;
 	a->d.height = 512;
 	a->p.mlx = mlx_init();
 	a->p.win = mlx_new_window(a->p.mlx, a->d.width, a->d.height, "start");
@@ -29,7 +29,8 @@ void	mandelbrot_set_init(t_all *a)
 	a->d.sign_x = '+';
 	a->d.sign_y = '+';
 	a->d.constant = 'n';
-	a->fix = 'n';
+	a->d.state = 'n';
+	a->fix = 'y';
 	a->d.power = 2.0;
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
@@ -46,7 +47,7 @@ void	burning_ship_init(t_all *a)
 	int		y;
 	int		z;
 
-	a->d.width = 512;
+	a->d.width = 1024;
 	a->d.height = 512;
 	a->p.mlx = mlx_init();
 	a->p.win = mlx_new_window(a->p.mlx, a->d.width, a->d.height, "start");
@@ -57,7 +58,8 @@ void	burning_ship_init(t_all *a)
 	a->d.sign_x = '+';
 	a->d.sign_y = '+';
 	a->d.constant = 'n';
-	a->fix = 'n';
+	a->d.state = 'n';
+	a->fix = 'y';
 	a->d.power = 2.0;
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
@@ -74,7 +76,7 @@ void	julia_set_init(t_all *a)
 	int		y;
 	int		z;
 
-	a->d.width = 512;
+	a->d.width = 1024;
 	a->d.height = 512;
 	a->p.mlx = mlx_init();
 	a->p.win = mlx_new_window(a->p.mlx, a->d.width, a->d.height, "start");
@@ -85,13 +87,14 @@ void	julia_set_init(t_all *a)
 	a->d.sign_x = '+';
 	a->d.sign_y = '+';
 	a->d.constant = 'y';
-	a->fix = 'n';
+	a->d.state = 'n';
+	a->fix = 'y';
 	a->d.power = 2.0;
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
 	a->d.scale = 2.0;
-	a->d.m_pos_x = 0.0;
-	a->d.m_pos_y = 0.0;
+	a->d.m_pos_x = a->d.width / 2;
+	a->d.m_pos_y = a->d.height / 2;
 	start_kernel(a);
 	run_kernel(a);
 }

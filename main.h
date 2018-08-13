@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 13:36:53 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/13 13:04:36 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct			s_data
 	char				abs_x;
 	char				abs_y;
 	char				constant;
+	char				state;
 }						t_data;
 
 typedef struct			s_all

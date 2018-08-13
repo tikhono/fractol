@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:27:07 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/10 12:02:52 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/13 13:07:48 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int		mouse_click(int key, int x, int y, t_all *a)
 {
 	if (key == 1)
 		a->fix = a->fix == 'y' ? 'n' : 'y';
+	if (key == 2)
+		a->d.state = a->d.state == 'y' ? 'n' : 'y';
 	if (key == 4)
 		a->d.scale -= 0.1 * a->d.scale;
 	if (key == 5)
