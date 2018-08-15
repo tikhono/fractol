@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/13 13:35:54 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 14:25:51 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	mandelbrot_set_init(t_all *a)
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
 	a->d.scale = 2.0;
-	a->d.m_pos_x = 0.0;
-	a->d.m_pos_y = 0.0;
+	a->d.m_pos_x = a->d.width / 2;
+	a->d.m_pos_y = a->d.height / 2;
 	start_kernel(a);
 	run_kernel(a);
 }
@@ -64,8 +64,8 @@ void	burning_ship_init(t_all *a)
 	a->d.off_x = 0.0;
 	a->d.off_y = 0.0;
 	a->d.scale = 2.0;
-	a->d.m_pos_x = 0.0;
-	a->d.m_pos_y = 0.0;
+	a->d.m_pos_x = a->d.width / 2;
+	a->d.m_pos_y = a->d.height / 2;
 	start_kernel(a);
 	run_kernel(a);
 }
