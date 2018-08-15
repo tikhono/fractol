@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:50:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/15 14:34:45 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 14:39:42 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,35 +96,20 @@ void			start_kernel(t_all *a)
 	device = create_device();
 	context = clCreateContext(NULL, 1, &device, NULL, NULL, &err);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't create a context");
 		exit(1);
-	}
 	program = build_program(context, device, PROGRAM_FILE);
 	a->k.global_size = a->d.height * a->d.width;
 	a->k.local_size = 256;
 	a->k.res_buffer = clCreateBuffer(context, CL_MEM_READ_WRITE |
 			CL_MEM_USE_HOST_PTR, sizeof(int) * a->k.global_size, a->addr, &err);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't create a buffer");
-		ft_putnbr(err);
 		exit(1);
-	}
 	a->k.queue = clCreateCommandQueue(context, device, 0, &err);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't create a command queue");
-		ft_putnbr(err);
 		exit(1);
-	}
 	a->k.kernel = clCreateKernel(program, KERNEL_FUNC, &err);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't create a kernel");
-		ft_putnbr(err);
 		exit(1);
-	}
 }
 
 int				run_kernel(t_all *a)
@@ -135,27 +120,15 @@ int				run_kernel(t_all *a)
 	err = clSetKernelArg(a->k.kernel, 0, sizeof(t_data), &a->d);
 	err |= clSetKernelArg(a->k.kernel, 1, sizeof(cl_mem), &a->k.res_buffer);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't create a kernel argument");
-		ft_putnbr(err);
 		exit(1);
-	}
 	err = clEnqueueNDRangeKernel(a->k.queue, a->k.kernel, 1, NULL,
 			&a->k.global_size, NULL, 0, NULL, NULL);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't enqueue the kernel");
-		ft_putnbr(err);
 		exit(1);
-	}
 	err = clEnqueueReadBuffer(a->k.queue, a->k.res_buffer, CL_TRUE, 0,
 			sizeof(int) * a->k.global_size, a->addr, 0, NULL, NULL);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't read the buffer");
-		ft_putnbr(err);
 		exit(1);
-	}
 	mlx_put_image_to_window(a->p.mlx, a->p.win, a->p.img, 0, 0);
 	return (0);
 }
