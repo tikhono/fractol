@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:50:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/13 11:37:14 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 13:59:14 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ int				run_kernel(t_all *a)
 {
 	int		err;
 
+	a->d.lim = 50 * pow(log10(10 / a->d.scale), 1.25);
+	printf("%d\n", a->d.lim);
 	err = clSetKernelArg(a->k.kernel, 0, sizeof(t_data), &a->d);
 	err |= clSetKernelArg(a->k.kernel, 1, sizeof(cl_mem), &a->k.res_buffer);
 	if (err < 0)

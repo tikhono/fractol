@@ -4,6 +4,7 @@ typedef struct	s_data
 	int			height;
 	int			m_pos_x;
 	int			m_pos_y;
+	int			lim;
 	double		power;
 	double		scale;
 	double		off_x;
@@ -19,7 +20,6 @@ typedef struct	s_data
 __kernel void add_number(t_data input, __global int *output)
 {
 	int		n;
-	int		lim;
 	int		id;
 	double	x;
 	double	y;
@@ -45,38 +45,29 @@ __kernel void add_number(t_data input, __global int *output)
 		}
 		else
 		{
-			x = input.off_x * d + (input.m_pos_x * 4.0  / input.width -  2.0);	
-			y = input.off_y * d + (input.m_pos_y * 4.0  / input.height -  2.0);
+			x = input.off_x * d + (input.m_pos_x * 4.0  / input.width - 2.0);	
+			y = input.off_y * d + (input.m_pos_y * 4.0  / input.height - 2.0);
 		}
 	}
 	n = 0;
-	lim = 50;
-	while (n < lim)
+	while (n < input.lim)
 	{
 		a = input.abs_x == 'y' ? fabs(a) : a;
 		b = input.abs_y == 'y' ? fabs(b) : b;
 		a = input.sign_x == '+' ? a : -a;
 		b = input.sign_y == '+' ? b : -b;
-		if (a != 0.0 || b != 0.0)
-		{
-			pii = b < 0.0 ? -M_PI_F : M_PI_F;
-			if (a > 0.0)
-				pii = 0.0;
-			if (a == 0.0)
-				pii /= 2.0;
-			z = pow(sqrt(a * a + b * b), input.power);
-			phi = (atan(b / a) * (a == 0.0 ? 0.0 : 1.0) + pii) * input.power;
-			a = z * cos(phi);
-			b = z * sin(phi);
-		}
+		z = pow(sqrt(a * a + b * b), input.power);
+		phi = atan2(b, a) * input.power;
+		a = z * cos(phi);
+		b = z * sin(phi);
 		a += x;
 		b += y;	
 		if (a * a + b * b > 4.0)
 			break;
 		++n;
 	}
-	if (n == lim)
+	if (n == input.lim)
 		output[id] = 0;
 	else
-		output[id] = 0xFFFFFF / lim * n;
+		output[id] = 0x0F0F0F / input.lim  * (n + 1);
 }

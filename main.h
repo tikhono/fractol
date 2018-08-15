@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/10 17:41:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/13 13:04:36 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 12:43:00 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct			s_data
 	int					height;
 	int					m_pos_x;
 	int					m_pos_y;
+	int					lim;
 	double				power;
 	double				scale;
 	double				off_x;
