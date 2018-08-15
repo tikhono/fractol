@@ -69,5 +69,5 @@ __kernel void add_number(t_data input, __global int *output)
 	if (n == input.lim)
 		output[id] = 0;
 	else
-		output[id] = 0x0F0F0F / input.lim  * (n + 1);
+		output[id] = 0x0F0F0F * 0x0F0F0F / input.lim  * (n + 1);
 }
