@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:50:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/15 14:39:42 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 15:15:25 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,33 @@ cl_device_id	create_device(void)
 	return (dev);
 }
 
-cl_program		build_program(cl_context ctx, cl_device_id dev, const char *filename)
+void			print_log(cl_program program, cl_device_id dev)
+{
+	char		*program_log;
+	size_t		log_size;
+
+	clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG,
+			0, NULL, &log_size);
+	program_log = (char*)malloc(log_size + 1);
+	program_log[log_size] = '\0';
+	clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG,
+			log_size + 1, program_log, NULL);
+	ft_putendl(program_log);
+	free(program_log);
+	exit(1);
+}
+
+cl_program		build_program(cl_context ctx, cl_device_id dev, char *filename)
 {
 	cl_program	program;
 	FILE		*program_handle;
 	char		*program_buffer;
-	char		*program_log;
 	size_t		program_size;
-	size_t		log_size;
 	int			err;
 
 	program_handle = fopen(filename, "r");
 	if (program_handle == NULL)
-	{
-		ft_putendl("Couldn't find the program file");
 		exit(1);
-	}
 	fseek(program_handle, 0, SEEK_END);
 	program_size = ftell(program_handle);
 	rewind(program_handle);
@@ -63,24 +74,11 @@ cl_program		build_program(cl_context ctx, cl_device_id dev, const char *filename
 	program = clCreateProgramWithSource(ctx, 1,
 			(const char**)&program_buffer, &program_size, &err);
 	if (err < 0)
-	{
-		ft_putendl("Couldn't create the program");
 		exit(1);
-	}
 	free(program_buffer);
 	err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
 	if (err < 0)
-	{
-		clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG,
-				0, NULL, &log_size);
-		program_log = (char*)malloc(log_size + 1);
-		program_log[log_size] = '\0';
-		clGetProgramBuildInfo(program, dev, CL_PROGRAM_BUILD_LOG,
-				log_size + 1, program_log, NULL);
-		ft_putendl(program_log);
-		free(program_log);
-		exit(1);
-	}
+		print_log(program, dev);
 	return (program);
 }
 
