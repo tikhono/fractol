@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:50:57 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/15 13:59:14 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 14:34:45 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ cl_device_id	create_device(void)
 		ft_putendl("Couldn't identify a platform");
 		exit(1);
 	}
-	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
+	err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
 	if (err == CL_DEVICE_NOT_FOUND)
-		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &dev, NULL);
+		err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_CPU, 1, &dev, NULL);
 	if (err < 0)
 	{
 		ft_putendl("Couldn't access any devices");
@@ -132,7 +132,6 @@ int				run_kernel(t_all *a)
 	int		err;
 
 	a->d.lim = 50 * pow(log10(10 / a->d.scale), 1.25);
-	printf("%d\n", a->d.lim);
 	err = clSetKernelArg(a->k.kernel, 0, sizeof(t_data), &a->d);
 	err |= clSetKernelArg(a->k.kernel, 1, sizeof(cl_mem), &a->k.res_buffer);
 	if (err < 0)
@@ -160,12 +159,13 @@ int				run_kernel(t_all *a)
 	mlx_put_image_to_window(a->p.mlx, a->p.win, a->p.img, 0, 0);
 	return (0);
 }
+
 /*
- *	Deallocate resources 
- *	clReleaseKernel(kernel);
- *	clReleaseMemObject(res_buffer);
- *	clReleaseMemObject(input_buffer);
- *	clReleaseCommandQueue(queue);
- *	clReleaseProgram(program);
- *	clReleaseContext(context);
- */
+**	Deallocate resources
+**	clReleaseKernel(kernel);
+**	clReleaseMemObject(res_buffer);
+**	clReleaseMemObject(input_buffer);
+**	clReleaseCommandQueue(queue);
+**	clReleaseProgram(program);
+**	clReleaseContext(context);
+*/
