@@ -6,7 +6,7 @@
 /*   By: atikhono <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:03:26 by atikhono          #+#    #+#             */
-/*   Updated: 2018/08/15 14:25:51 by atikhono         ###   ########.fr       */
+/*   Updated: 2018/08/15 15:35:45 by atikhono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,14 @@ void	julia_set_init(t_all *a)
 void	print_help(void)
 {
 	ft_putendl("Usage:\n./fractol mandelbrot_set julia_set burning_ship");
+	ft_putendl("Also you can modify equasion with next keys:");
+	ft_putendl("1 - to change real part sign of complex number on opposite;");
+	ft_putendl("2 - to use abs value of real part of complex number or not;");
+	ft_putendl("3 - to change imag part sign of complex number on opposite;");
+	ft_putendl("4 - to use abs value of imag part of complex number or not;");
+	ft_putendl("q - to increase power of complex numper at step 0.01;");
+	ft_putendl("w - to decrease power of complex numper at step 0.01.");
+	ft_putendl("However, with several params you can open several windows.");
 	exit(0);
 }
 
